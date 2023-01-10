@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Usuario;
 use Carbon\Carbon;
@@ -72,6 +73,18 @@ class UserController extends Controller
     {
         $datos = Usuario::find($id);
         if ($datos) {
+            $que = Usuario::where('numero', $request->numero)->first();
+            $que2 = Usuario::where('email', $request->email)->first();
+            if (isset($que->id)) {
+                if ($que->id != $datos->id) {
+                    return response()->json('El numero ya esta registrado con otro usuario');
+                }
+            }
+            if (isset($que2->id)) {
+                if ($que2->id != $datos->id) {
+                    return response()->json('El correo electronico ya existe en otra parte');
+                }
+            }
             $datos->numero = $request->numero;
             $datos->email = $request->email;
             $datos->apellido = $request->apellido;
