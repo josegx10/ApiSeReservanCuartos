@@ -18,10 +18,10 @@ class UserController extends Controller
     {
         $datos = new Usuario();
 
-        $query1 = Usuario::where('email', $request->email)->first();
-        $query2 = Usuario::where('numero', $request->numero)->first();
-        if ($query1 != null && $query2 != null) {
-            return response()->json('El correo ya esta registrado');
+        $query1 = Usuario::where('email', $request->email)->get();
+        $query2 = Usuario::where('numero', $request->numero)->get();
+        if (isset($query1[0]->id) || isset($query2[0]->id)) {
+            return response()->json('El correo o telefono ya esta registrado');
         } else {
             $datos->numero = $request->numero;
             $datos->email = $request->email;
